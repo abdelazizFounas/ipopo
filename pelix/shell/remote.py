@@ -242,44 +242,6 @@ class ThreadingTCPServerFamily(socketserver.ThreadingTCPServer):
         thread.daemon = self.daemon_threads
         thread.start()
 
-
-def _create_server(shell, server_address, port):
-    """
-    Creates the TCP console on the given address and port
-
-    :param shell: The remote shell handler
-    :param server_address: Server bound address
-    :param port: Server port
-    :return: server thread, TCP server object
-    """
-    # Set up the request handler creator
-    active_flag = SharedBoolean(True)
-
-    def request_handler(*rh_args):
-        """
-        Constructs a RemoteConsole as TCP request handler
-        """
-        return RemoteConsole(shell, active_flag, *rh_args)
-
-    # Set up the server
-    server = ThreadingTCPServerFamily((server_address, port), request_handler)
-
-    # Set flags
-    server.daemon_threads = True
-    server.allow_reuse_address = True
-
-    # Activate the server
-    server.server_bind()
-    server.server_activate()
-
-    # Serve clients
-    server_thread = threading.Thread(target=server.serve_forever,
-                                     name="RemoteShell-{0}".format(port))
-    server_thread.daemon = True
-    server_thread.start()
-
-    return server_thread, server, active_flag
-
 # ------------------------------------------------------------------------------
 
 
@@ -366,11 +328,11 @@ class IPopoRemoteShell(object):
 
         # Start the TCP server
         self._thread, self._server, self._server_flag = \
-            _create_server(self, self._address, self._port)
+            self._create_server()
 
         # Property update (if port was 0)
         self._port = self._server.socket.getsockname()[1]
-        _logger.info("RemoteShell validated on port: %d", self._port)
+        _logger.info("%s validated on port: %d", type(self).__name__, self._port)
 
     @Invalidate
     def invalidate(self, context):
@@ -393,6 +355,43 @@ class IPopoRemoteShell(object):
         self._thread = None
         self._server = None
         self._server_flag = None
+
+    def _create_server(self):
+        """
+        Creates the TCP console on the given address and port
+
+        :param shell: The remote shell handler
+        :param server_address: Server bound address
+        :param port: Server port
+        :return: server thread, TCP server object
+        """
+        # Set up the request handler creator
+        active_flag = SharedBoolean(True)
+
+        def request_handler(*rh_args):
+            """
+            Constructs a RemoteConsole as TCP request handler
+            """
+            return RemoteConsole(self, active_flag, *rh_args)
+
+        # Set up the server
+        server = ThreadingTCPServerFamily((self._address, self._port), request_handler)
+
+        # Set flags
+        server.daemon_threads = True
+        server.allow_reuse_address = True
+
+        # Activate the server
+        server.server_bind()
+        server.server_activate()
+
+        # Serve clients
+        server_thread = threading.Thread(target=server.serve_forever,
+                                         name="RemoteShell-{0}".format(self._port))
+        server_thread.daemon = True
+        server_thread.start()
+
+        return server_thread, server, active_flag
 
 # ------------------------------------------------------------------------------
 
