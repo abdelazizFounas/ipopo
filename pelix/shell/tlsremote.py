@@ -78,12 +78,14 @@ class TLS_TCPServer(socketserver.TCPServer):
                  server_address,
                  certfile,
                  keyfile,
+                 ca_certs,
                  RequestHandlerClass,
                  ssl_version=ssl.PROTOCOL_TLSv1,
                  bind_and_activate=True):
         socketserver.TCPServer.__init__(self, server_address, RequestHandlerClass, bind_and_activate)
         self.certfile = certfile
         self.keyfile = keyfile
+        self.ca_certs = ca_certs
         self.ssl_version = ssl_version
 
     def get_request(self):
@@ -91,8 +93,10 @@ class TLS_TCPServer(socketserver.TCPServer):
         connstream = ssl.wrap_socket(newsocket,
                                  server_side = True,
                                  certfile = self.certfile,
-                                 keyfile = self.keyfile
-                                #  ssl_version = self.ssl_version
+                                 keyfile = self.keyfile,
+                                 cert_reqs = ssl.CERT_REQUIRED,
+                                 ca_certs=self.ca_certs,
+                                 ssl_version = self.ssl_version
                                  )
         return connstream, fromaddr
 
@@ -102,7 +106,7 @@ class TLS_ThreadingTCPServerFamily(socketserver.ThreadingMixIn, TLS_TCPServer):
     """
     Threaded TCP Server handling different address families
     """
-    def __init__(self, server_address, certfile, keyfile, request_handler_class, ssl_version=ssl.PROTOCOL_TLSv1):
+    def __init__(self, server_address, certfile, keyfile, ca_certs, request_handler_class, ssl_version=ssl.PROTOCOL_TLSv1):
         """
         Sets up the TCP server. Doesn't bind nor activate it.
         """
@@ -115,10 +119,10 @@ class TLS_ThreadingTCPServerFamily(socketserver.ThreadingMixIn, TLS_TCPServer):
         self.address_family = addr_info[0][0]
 
         # Call the super constructor
-        TLS_ThreadingTCPServer.__init__(self, server_address,
-                                                    certfile, keyfile,
-                                                    request_handler_class,
-                                                    ssl_version, False)
+        TLS_TCPServer.__init__(self, server_address,
+                                        certfile, keyfile, ca_certs,
+                                        request_handler_class,
+                                        ssl_version, False)
         if self.address_family == socket.AF_INET6:
             # Explicitly ask to be accessible both by IPv4 and IPv6
             try:
@@ -151,7 +155,7 @@ class TLS_ThreadingTCPServerFamily(socketserver.ThreadingMixIn, TLS_TCPServer):
 @Property("_address", "pelix.shell.tlsremote.address", "localhost")
 @Property("_port", "pelix.shell.tlsremote.port", 9001)
 @Property("_ssl_version", "pelix.shell.tlsremote.sslversion", ssl.PROTOCOL_TLSv1)
-class IPopoTLSRemoteShell(IPopoRemoteShell):
+class TLS_IPopoRemoteShell(IPopoRemoteShell):
 
     def _create_server(self):
         """
@@ -174,9 +178,11 @@ class IPopoTLSRemoteShell(IPopoRemoteShell):
         # TODO: used a service to retrieve cert files
         certfile = "/tmp/ipopo/server/certificat.pem"
         keyfile = "/tmp/ipopo/server/cle-privee.key"
+        ca_certs = "/tmp/ipopo/server/core_ca.pem"
+
 
         # Set up the server
-        server = ThreadingTLSTCPServerFamily((self._address, self._port), certfile, keyfile, request_handler, self._ssl_version)
+        server = TLS_ThreadingTCPServerFamily((self._address, self._port), certfile, keyfile, ca_certs, request_handler, self._ssl_version)
 
         # Set flags
         server.daemon_threads = True
