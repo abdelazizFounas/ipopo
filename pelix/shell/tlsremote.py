@@ -98,11 +98,7 @@ class TLS_TCPServer(socketserver.TCPServer):
 
 # ------------------------------------------------------------------------------
 
-class TLS_ThreadingTCPServer(socketserver.ThreadingMixIn, TLS_TCPServer): pass
-
-# ------------------------------------------------------------------------------
-
-class ThreadingTLSTCPServerFamily(TLS_ThreadingTCPServer, ThreadingTCPServerFamily):
+class TLS_ThreadingTCPServerFamily(socketserver.ThreadingMixIn, TLS_TCPServer):
     """
     Threaded TCP Server handling different address families
     """
@@ -131,6 +127,19 @@ class ThreadingTLSTCPServerFamily(TLS_ThreadingTCPServer, ThreadingTCPServerFami
                 _logger.exception("System misses IPv6 constant: %s", ex)
             except socket.error as ex:
                 _logger.exception("Error setting up IPv6 double stack: %s", ex)
+
+    def process_request(self, request, client_address):
+        """
+        Starts a new thread to process the request, adding the client address
+        in its name.
+        """
+        thread = threading.Thread(
+            name="RemoteShell-{0}-Client-{1}".format(self.server_address[1],
+                                                     client_address[:2]),
+            target=self.process_request_thread,
+            args=(request, client_address))
+        thread.daemon = self.daemon_threads
+        thread.start()
 
 # ------------------------------------------------------------------------------
 
