@@ -32,5 +32,5 @@ class KeyStore:
     def removeCert(aId):
         pass
 
-    def createKeystore(aPath, aInfos):
+    def restoreFromDisk():
         pass
