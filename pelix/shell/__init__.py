@@ -70,6 +70,14 @@ Remote shell service
   waiting clients.
 """
 
+TLS_SERVICE_SHELL_REMOTE = "pelix.shell.tlsremote"
+"""
+TLS Remote shell service
+
+* get_access(): returns the (host, port) tuple where the TLS remote shell is
+  waiting clients.
+"""
+
 SERVICE_SHELL_REPORT = "pelix.shell.report"
 """
 Report command service: gives access to the report methods for a future reuse
@@ -101,6 +109,9 @@ REMOTE_SHELL_SPEC = SERVICE_SHELL_REMOTE
 
 FACTORY_REMOTE_SHELL = "ipopo-remote-shell-factory"
 """ Name of remote shell component factory """
+
+FACTORY_TLS_REMOTE_SHELL = "ipopo-tlsremote-shell-factory"
+""" Name of tls remote shell component factory """
 
 FACTORY_XMPP_SHELL = "ipopo-xmpp-shell-factory"
 """ Name of XMPP shell component factory """

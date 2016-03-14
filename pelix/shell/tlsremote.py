@@ -147,9 +147,8 @@ class TLS_ThreadingTCPServerFamily(socketserver.ThreadingMixIn, TLS_TCPServer):
 
 # ------------------------------------------------------------------------------
 
-# TODO: use constants
-@ComponentFactory("ipopo-tlsremote-shell-factory")
-@Provides("pelix.shell.tlsremote")
+@ComponentFactory(pelix.shell.FACTORY_TLS_REMOTE_SHELL)
+@Provides(pelix.shell.TLS_SERVICE_SHELL_REMOTE)
 @Requires("_shell", pelix.shell.SERVICE_SHELL)
 # TODO: Add a _keystore service to retrieve certfile and keyfile
 @Property("_address", "pelix.shell.tlsremote.address", "localhost")
