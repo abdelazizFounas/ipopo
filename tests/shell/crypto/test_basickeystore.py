@@ -5,7 +5,7 @@ Tests the basic keystore
 """
 
 # Pelix
-import pelix.shell.crypto
+from pelix.shell.crypto import BasicKeyStore
 
 # Standard library
 import threading
