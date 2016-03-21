@@ -30,10 +30,10 @@ class DummyCertificates(object):
         self.data = 'data'
         self.aId = 'aId'
 
-    def getId():
+    def getId(self):
         return self.aId
 
-    def __str__():
+    def __str__(self):
         return 'CERTIFICAT : ' + self.data + ' ' + self.aId + '\n'
 
 # ------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ class BasicKeystoreTest(unittest.TestCase):
     def testBasic(self):
         self.ks = BasicKeyStore('.')
         self.cert = DummyCertificates()
-        print(self.cert.__str__())
+        print(self.cert)
         self.ks.addCert(self.cert)
         self.cert2 = self.ks.getCert(self.cert.getId())
-        print(self.cert2.__str__())
+        print(self.cert2)

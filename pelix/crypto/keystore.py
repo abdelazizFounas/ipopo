@@ -18,17 +18,17 @@ class KeyStore:
     def __init__(self, aPath):
         self.pPath = aPath
 
-    def getPath():
+    def getPath(self):
         pass
 
-    def addCert(aCert):
+    def addCert(self, aCert):
         pass
 
-    def getCert(aId):
+    def getCert(self, aId):
         pass
 
-    def removeCert(aId):
+    def removeCert(self, aId):
         pass
 
-    def restoreFromDisk():
+    def restoreFromDisk(self):
         pass
