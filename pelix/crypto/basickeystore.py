@@ -7,7 +7,7 @@ Provides a keystore interface
 """
 
 # Standard library
-from pelix.crypto import KeyStore
+from pelix.crypto.keystore import KeyStore
 import logging
 import pickle
 import os
