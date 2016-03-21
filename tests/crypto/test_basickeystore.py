@@ -42,9 +42,7 @@ class BasicKeystoreTest(unittest.TestCase):
     Tests the basic keystore
     """
     def testBasic(self):
-        self.ks = BasicKeyStore('.')
+        self.ks = BasicKeyStore('./testBKS')
         self.cert = DummyCertificates()
-        print(self.cert)
         self.ks.addCert(self.cert)
         self.cert2 = self.ks.getCert(self.cert.getId())
-        print(self.cert2)

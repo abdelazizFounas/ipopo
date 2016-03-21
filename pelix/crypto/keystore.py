@@ -32,3 +32,6 @@ class KeyStore:
 
     def restoreFromDisk(self):
         pass
+
+    def getIds(self):
+        pass
