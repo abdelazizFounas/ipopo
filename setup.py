@@ -71,7 +71,8 @@ setup(
         'pelix.remote.discovery',
         'pelix.remote.transport',
         'pelix.services',
-        'pelix.shell'],
+        'pelix.shell',
+        'pelix.shell.crypto'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',

@@ -4,8 +4,6 @@
 iPOPO keystore
 
 Provides a keystore interface
-
-:author: Abdelaziz Founas
 """
 
 # Standard library
