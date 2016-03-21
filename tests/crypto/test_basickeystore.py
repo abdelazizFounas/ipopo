@@ -29,12 +29,10 @@ class DummyCertificates(object):
         # Topic of the last received event
         self.data = 'data'
         self.aId = 'aId'
-
     def getId(self):
         return self.aId
-
     def __str__(self):
-        return 'CERTIFICAT : ' + self.data + ' ' + self.aId + '\n'
+        return 'CERTIFICAT : ' + self.data + ' ' + self.aId
 
 # ------------------------------------------------------------------------------
 

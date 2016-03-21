@@ -27,22 +27,24 @@ class BasicKeyStore(KeyStore):
 
     def addCert(self, aCert):
         self.dCert[aCert.getId()] = aCert
-        with open(self.pPath+aCert.getId()+'.pem', 'wb') as file:
+        with open(self.pPath+'/'+aCert.getId()+'.pem', 'wb') as file:
             pickler = pickle.Pickler(file)
             pickler.dump(aCert)
+            file.close()
 
     def getCert(self, aId):
         return self.dCert.get(aId)
 
     def removeCert(self, aId):
         del self.dCert[aId]
-        os.remove(self.pPath+aId+'.pem')
+        os.remove(self.pPath+'/'+aId+'.pem')
 
     def restoreFromDisk(self):
         lFiles = os.listdir(self.pPath)
         for dir in lFiles:
-            if os.path.isfile(self.pPath+dir) :
+            if os.path.isfile(self.pPath+'/'+dir) :
                 if os.path.splitext(dir)[1] == '.pem' :
-                    with open(self.pPath+dir, 'rb') as file:
+                    with open(self.pPath+'/'+dir, 'rb') as file:
                         unpickler = pickle.Unpickler(file)
                         self.dCert[os.path.splitext(dir)[0]] = unpickler.load()
+                        file.close()
