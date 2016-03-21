@@ -10,3 +10,9 @@ __version__ = ".".join(str(x) for x in __version_info__)
 
 # Documentation strings format
 __docformat__ = "restructuredtext en"
+
+# ------------------------------------------------------------------------------
+
+SERVICE_CRYPTO = "pelix.crypto"
+
+SERVICE_CRYPTO_BASICKEYSTORE = "pelix.crypto.basickeystore"
