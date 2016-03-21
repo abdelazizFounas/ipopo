@@ -27,14 +27,14 @@ class DummyCertificates(object):
     """
     def __init__(self):
         # Topic of the last received event
-        self.data = 'certicatipopo'
-        self.aId = 'ident'
+        self.data = 'data'
+        self.aId = 'aId'
 
     def getId():
         return self.aId
 
     def __str__():
-        return 'CERTIFICAT : ' + self.data + ' ' + self.aId
+        return 'CERTIFICAT : ' + self.data + ' ' + self.aId + '\n'
 
 # ------------------------------------------------------------------------------
 
@@ -46,6 +46,7 @@ class BasicKeystoreTest(unittest.TestCase):
     def testBasic(self):
         self.ks = BasicKeyStore('.')
         self.cert = DummyCertificates()
+        print(self.cert.__str__())
         self.ks.addCert(self.cert)
         self.cert2 = self.ks.getCert(self.cert.getId())
         print(self.cert2.__str__())

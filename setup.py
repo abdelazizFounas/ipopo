@@ -72,7 +72,7 @@ setup(
         'pelix.remote.transport',
         'pelix.services',
         'pelix.shell',
-        'pelix.shell.crypto'],
+        'pelix.crypto'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
