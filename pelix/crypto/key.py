@@ -8,11 +8,10 @@ __version__ = ".".join(str(x) for x in __version_info__)
 # Documentation strings format
 __docformat__ = "restructuredtext en"
 
-
-TYPE_RSA = crypto.TYPE_RSA
-TYPE_DSA = crypto.TYPE_DSA
-
 class Key:
+
+	TYPE_RSA = crypto.TYPE_RSA
+	TYPE_DSA = crypto.TYPE_DSA
 
 	def __init__(self):
 		self._pkey = crypto.PKey()

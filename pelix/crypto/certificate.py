@@ -1,3 +1,6 @@
+from pelix.crypto.entity import Entity
+from pelix.crypto.key import Key
+
 from OpenSSL import crypto
 
 
