@@ -46,34 +46,40 @@ class PKI(object):
     Represents a PKI. (Private Key Infrastructure). It manages certificates authorities
     """
 
-    _keystore = None
-    _path = None
-    _authorities = None
-
     def __init__(self, path):
         """
         Load a pki stored at the given location. It loads two keystore. The first one contains the certificates handled by the pki and the second one contains the certification authorities.
 
         :param aPath: Location of the pki to load
         """
+        self._keystore = None
+        self._path = None
+        self._authorities = None
+        self._revokedCa = "ca_revoked"
+        self._revokedCert = "cert_revoked"
+
         # Store _path, adding a trailing slash if not present
         if path.endswith('/'):
             self._path = path
         else:
             self._path = path + '/'
 
-        # Loading the keystore
+        # Loading or creating the keystore
         if not os.path.exists(self._path + 'ks'):
             os.makedirs(self._path + 'ks')
         self._keystore = BasicKeyStore(self._path + 'ks')
 
-        # Loading the authorities
+        # Loading or creation the authorities
         if not os.path.exists(self._path + 'ca'):
             os.makedirs(self._path + 'ca')
         self._authorities = BasicKeyStore(self._path + 'ca')
 
+        # Create revoked CA and revoked Cert files
+        open(self._path + self._revokedCa, 'a')
+        open(self._path + self._revokedCert, 'a')
 
-    def addAuthority(self, name, cert):
+
+    def addAuthority(self, cert, name):
         """
         Add an authority to the pki.
 
@@ -99,31 +105,6 @@ class PKI(object):
         """
         self._authorities.removeCert(name)
 
-    def getKeyStore(self):
-        """
-        Return the keystore containing all keys handled by the pki
-        :return: Keystore
-        """
-        return self._keystore
-
-    def verify(self, cert):
-        """
-        Verify the certificate
-
-        :return: True if the ceriticate was issued by one of the authorities and certificate is not revoked
-        """
-        raise NotImplementedError
-
-    def revokeCert(self, id):
-        """
-        Revoke the certificate identified by :id: in the pki
-        :param id: id of the certificate to revoke
-        """
-        cert = self._keystore.getCert(id)
-        if cert is not None:
-            with open(self._path+'cert_revoked', 'a') as f:
-                f.write(id)
-
     def revokeAuthority(self, name):
         """
         Revoke the certificate authority named :name:
@@ -132,5 +113,73 @@ class PKI(object):
         """
         ca = self.getAuthority(name)
         if ca is not None:
-            with open(self._path+'ca_revoked', 'a') as f:
-                f.write(ca.getId())
+            with open(self._path + self._revokedCa, 'a') as f:
+                f.write(ca.getId() + '\n')
+
+    def getRevokedAuthorities(self):
+        """
+        Get the list of id of revoked authorities
+        :return: list of revoked
+        """
+        auths = []
+        with open(self._path + self._revokedCa, 'r') as f:
+            for line in f:
+                id = line.rstrip('\n')
+                auths.append(id)
+        return auths
+
+    def addCertificate(self, cert, name=None):
+        """
+        Add a certificate to the pki.
+
+        :param name: Name of the certificate
+        :param cert: Certificate to use
+        """
+        self._keystore.addCert(cert, name)
+
+    def getCertificate(self, id):
+        """
+        Retrieve the certificate linked to the authority previously added to the pki.
+
+        :param id: id of the certificate
+        :return: Certificate
+        """
+        return self._keystore.getCert(id)
+
+    def removeCertificate(self, id):
+        """
+        Remove a certificate in the PKI
+
+        :param id: id of the certificate
+        """
+        self._keystore.removeCert(id)
+
+    def revokeCertificate(self, id):
+        """
+        Revoke the certificate identified by :id: in the pki
+        :param id: id of the certificate to revoke
+        """
+        cert = self._keystore.getCert(id)
+        if cert is not None:
+            with open(self._path + self._revokedCert, 'a') as f:
+                f.write(str(id) + '\n')
+
+    def getRevokedCertificates(self):
+        """
+        Get the list of id of revoked certificates
+        :return: list of revoked
+        """
+        certs = []
+        with open(self._path + self._revokedCert, 'r') as f:
+            for line in f:
+                id = line.rstrip('\n')
+                certs.append(id)
+        return certs
+
+    def verify(self, cert):
+        """
+        Verify the certificate
+
+        :return: True if the ceriticate was issued by one of the authorities and certificate is not revoked
+        """
+        raise NotImplementedError
