@@ -10,21 +10,21 @@ __docformat__ = "restructuredtext en"
 
 class Key:
 
-	TYPE_RSA = crypto.TYPE_RSA
-	TYPE_DSA = crypto.TYPE_DSA
+    TYPE_RSA = crypto.TYPE_RSA
+    TYPE_DSA = crypto.TYPE_DSA
 
-	def __init__(self):
-		self._pkey = crypto.PKey()
+    def __init__(self):
+        self._pkey = crypto.PKey()
 
-	def generate_key(type, bits):
-		if type == crypto.TYPE_RSA:
-			type = TYPE_RSA
-		elif type == crypto.TYPE_DSA:
-			type = TYPE_DSA
-		self._pkey.generate_key(type, bits)
+    def generate_key(type, bits):
+        if type == crypto.TYPE_RSA:
+            type = TYPE_RSA
+        elif type == crypto.TYPE_DSA:
+            type = TYPE_DSA
+        self._pkey.generate_key(type, bits)
 
-	def  bits():
-		return self._pkey.bits()
+    def bits():
+        return self._pkey.bits()
 
-	def type():
-		return self._pkey.type()
+    def type():
+        return self._pkey.type()

@@ -11,5 +11,5 @@ __docformat__ = "restructuredtext en"
 
 class CSR:
 
-	def generate_CSR(Key key, Entity requester):
-		
+    def generate_CSR(Key key, Entity requester):
+        raise NotImplementedError
