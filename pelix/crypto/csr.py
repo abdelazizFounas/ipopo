@@ -49,4 +49,8 @@ class CSR:
     def verify(self, key):
         return self._req.sign(key._pkey)
 
+    def dump_certificate_request(self):
+        return crypto.dump_certificate_request(crypto.FILETYPE_PEM, self._req)
+
+
         

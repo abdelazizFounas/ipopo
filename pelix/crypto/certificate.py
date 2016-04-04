@@ -16,9 +16,9 @@ class Certificate:
 
     def __init__(self):
         self._cert = crypto.X509()
-        self_pubkey = Key()
+        self._pubkey = Key()
 
-    def ID():
+    def ID(self):
         return self._cert.digest(b"sha1")
 
     def get_subject(self):
@@ -58,6 +58,9 @@ class Certificate:
 
     def sign(self, pubkey, digest):
         self._cert.sign(pubkey._pkey, digest)
+
+    def dump_certificate(self):
+        return crypto.dump_certificate(crypto.FILETYPE_PEM, self._cert)
 
 
 

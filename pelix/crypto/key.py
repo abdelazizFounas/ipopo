@@ -21,14 +21,14 @@ class Key:
 
     def __init__(self):
         """
-        Sets up the key pair
+        Sets up the key pair. 
         """
         self._pkey = crypto.PKey()
         self._type = None
 
     def generate_key(self, keyType, bits):
         """
-        
+        Generates a key pair (private and public keys) into this object
         """
         self._pkey.generate_key(keyType, bits)
         self._type = keyType
@@ -41,3 +41,6 @@ class Key:
 
     def sign(self, data, digest):
         return self._pkey.sign(self._pkey, data, digest)
+
+    def dump_publickey(self):
+        return crypto.dump_publickey(crypto.FILETYPE_PEM, self._pkey)
