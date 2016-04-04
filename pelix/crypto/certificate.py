@@ -92,5 +92,5 @@ class Certificate:
         name.O = entity.get_organizationName()
         name.OU = entity.get_organizationalUnitName()
         name.CN = entity.get_commonName()
-        name.emailAddress = entity.get_email()
+        name.emailAddress = entity.get_emailAddress()
         return name
