@@ -29,6 +29,8 @@ class Key:
     def generate_key(self, keyType, bits):
         """
         Generates a key pair (private and public keys) into this object
+
+        :param keyType: the type of the key pair (either TYPE_RSA or TYPE_DSA)
         """
         self._pkey.generate_key(keyType, bits)
         self._type = keyType

@@ -88,9 +88,9 @@ class Certificate:
 
         name.C = entity.get_countryName()
         name.ST = entity.get_stateOrProvinceName()
-        name.l = entity.get_localityName()
-        name.o = entity.get_organizationName()
-        name.ou = entity.get_organizationalUnitName()
-        name.cn = entity.get_commonName()
+        name.L = entity.get_localityName()
+        name.O = entity.get_organizationName()
+        name.OU = entity.get_organizationalUnitName()
+        name.CN = entity.get_commonName()
         name.emailAddress = entity.get_email()
         return name
