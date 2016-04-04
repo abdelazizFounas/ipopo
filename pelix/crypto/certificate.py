@@ -19,13 +19,13 @@ class Certificate:
         self._pubkey = Key()
 
     def ID(self):
-        return self._cert.digest(b"sha1")
+        return self.
 
     def get_subject(self):
-        return _wrap_x509Name_into_Entity("subject")
+        return self._wrap_x509Name_into_Entity("subject")
 
     def get_issuer(self):
-        return _wrap_x509Name_into_Entity("issuer")
+        return self._wrap_x509Name_into_Entity("issuer")
 
     def get_pubkey(self):
         return self._pubkey
@@ -37,11 +37,11 @@ class Certificate:
         return self._cert.get_notBefore()
 
     def set_subject(self, subject):
-        s = _unwrap_entity_into_x509name(subject, "subject")
+        s = self._unwrap_entity_into_x509name(subject, "subject")
         self._cert.set_subject(s)
 
     def set_issuer(self, issuer):
-        i = _unwrap_entity_into_x509name(issuer, "issuer")
+        i = self._unwrap_entity_into_x509name(issuer, "issuer")
         self._cert.set_issuer(i)
 
     def set_pubkey(self, pubkey):
