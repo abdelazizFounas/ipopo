@@ -62,9 +62,9 @@ class Certificate:
 
 
     def _wrap_x509Name_into_Entity(self, subject_or_issuer):
-        if subject_or_issuer = "subject":
+        if subject_or_issuer == "subject":
             name = self._cert.get_issuer()
-        elif subject_or_issuer = "issuer":
+        elif subject_or_issuer == "issuer":
             name = self._cert.get_subject()
 
         c = name.C
@@ -78,9 +78,9 @@ class Certificate:
         return ent
 
     def _unwrap_entity_into_x509name(self, entity, subject_or_issuer):
-        if subject_or_issuer = "subject":
+        if subject_or_issuer == "subject":
             name = self._cert.get_subject()
-        elif subject_or_issuer = "issuer":
+        elif subject_or_issuer == "issuer":
             name = self._cert.get_issuer()
 
         name.C = entity.get_countryName()
