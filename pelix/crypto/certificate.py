@@ -56,6 +56,10 @@ class Certificate:
     def has_expired(self):
         return self._cert.has_expired()
 
+    def sign(self, pubkey, digest):
+        sign(pubkey._pkey, digest)
+
+
 
     def _wrap_x509Name_into_Entity(self, subject_or_issuer):
         if subject_or_issuer = "subject":
