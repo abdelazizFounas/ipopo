@@ -19,7 +19,7 @@ class Certificate:
         self._pubkey = Key()
 
     def ID(self):
-        return self.
+        return self._cert.get_subject().hash()
 
     def get_subject(self):
         return self._wrap_x509Name_into_Entity("subject")
