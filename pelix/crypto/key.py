@@ -9,15 +9,27 @@ __version__ = ".".join(str(x) for x in __version_info__)
 __docformat__ = "restructuredtext en"
 
 class Key:
+    """
+    Represents a DSA or RSA key pair
+    """
 
     TYPE_RSA = crypto.TYPE_RSA
+    """ The key is of type RSA """
+    
     TYPE_DSA = crypto.TYPE_DSA
+    """ The key is of type DSA """
 
     def __init__(self):
+        """
+        Sets up the key pair
+        """
         self._pkey = crypto.PKey()
         self._type = None
 
     def generate_key(self, keyType, bits):
+        """
+        
+        """
         self._pkey.generate_key(keyType, bits)
         self._type = keyType
 
@@ -28,4 +40,4 @@ class Key:
         return self._type
 
     def sign(self, data, digest):
-        return crypto.sign(self._pkey, data, digest)
+        return self._pkey.sign(self._pkey, data, digest)

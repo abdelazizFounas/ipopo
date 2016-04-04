@@ -57,7 +57,7 @@ class Certificate:
         return self._cert.has_expired()
 
     def sign(self, pubkey, digest):
-        sign(pubkey._pkey, digest)
+        self._cert.sign(pubkey._pkey, digest)
 
 
 

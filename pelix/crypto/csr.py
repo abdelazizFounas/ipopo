@@ -16,8 +16,8 @@ class CSR:
 
     def __init__(self):
         self._req = crypto.X509Req()
-        self._key = crypto.PKey()
-        self._subject = Entity()
+        self._key = None
+        self._subject = None
 
     def generate_CSR(key, subject):
         csr = CSR()
@@ -42,5 +42,11 @@ class CSR:
 
     def get_subject(self):
         return self._subject
+
+    def sign(self, key, digest):
+        self._req.sign(key._pkey, digest)
+
+    def verify(self, key):
+        return self._req.sign(key._pkey)
 
         
