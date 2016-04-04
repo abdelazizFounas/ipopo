@@ -30,19 +30,33 @@ class Key:
         """
         Generates a key pair (private and public keys) into this object
 
-        :param keyType: the type of the key pair (either TYPE_RSA or TYPE_DSA)
+        :param keyType: The type of the key pair (either TYPE_RSA or TYPE_DSA)
+        :param bits: The length of the key
         """
         self._pkey.generate_key(keyType, bits)
         self._type = keyType
 
     def bits(self):
+        """
+        Returns the length of the key in bits
+        """
         return self._pkey.bits()
 
     def type(self):
+        """
+        Returns the type of the key (either TYPE_RSA or TYPE_DSA)
+        """
         return self._type
 
     def sign(self, data, digest):
-        return self._pkey.sign(self._pkey, data, digest)
+        """
+        Signs a data string using this key and a message digest algorithm
+        (for example, sha1 or md5)
+        """
+        return crypto.sign(self._pkey, data, digest)
 
-    def dump_publickey(self):
+    def dump(self):
+        """
+        Dumps this key into a buffer string encoded with the PEM format
+        """
         return crypto.dump_publickey(crypto.FILETYPE_PEM, self._pkey)
