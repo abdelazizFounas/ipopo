@@ -55,8 +55,33 @@ class Key:
         """
         return crypto.sign(self._pkey, data, digest)
 
-    def dump(self):
+    def dump_public(self):
         """
-        Dumps this key into a buffer string encoded with the PEM format
+        Dumps the public key of this key pair into a buffer string encoded with the PEM format
         """
         return crypto.dump_publickey(crypto.FILETYPE_PEM, self._pkey)
+
+    def dump_private(self, 	cipher=None, passphrase=None):
+    	"""
+        Dumps the public key of this key pair into a buffer string encoded with the PEM format
+        """
+        return crypto.dump_privatekey(crypto.FILETYPE_PEM, self._pkey, cipher, passphrase)
+
+    def load_public(buf):
+    	"""
+        Loads a public key from a buffer
+        """
+        key = Key()
+        _k = crypto.load_publickey(crypto.FILETYPE_PEM, buf)
+        key._pkey = _k
+        return key
+
+    def load_private(buf, passphrase=None):
+    	"""
+        Loads a private key from a buffer
+        """
+        key = Key()
+        _k = crypto.load_private(crypto.FILETYPE_PEM, buf, passphrase)
+        key._pkey = _k
+        return key
+
