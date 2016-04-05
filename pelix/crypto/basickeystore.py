@@ -8,6 +8,8 @@ Provides a basic keystore
 
 # Standard library
 from pelix.crypto.keystore import KeyStore
+from pelix.crypto.certificate import Certificate
+from pelix.crypto.key import Key
 import logging
 import os
 
@@ -59,7 +61,7 @@ class BasicKeyStore(KeyStore):
 
     def addCert(self, aCert, aName = None):
         """
-        Add a certicate object with a special name aName or the ID of the certicate itself
+        Add a certificate object with a special name aName or the ID of the certificate itself
 
         :param aCert: The certificate to add
         :param aName: Special name at None by default
@@ -72,7 +74,7 @@ class BasicKeyStore(KeyStore):
         # We add the certificate to the dictionnary
         self.dCert[name] = aCert
         # Now add this certificate to the disk for persistence
-        # To the path and file extension ".pem" we open the file with binary and writing options
+        # To the path and file extension ".pem" we open the file with writing option
         with open(self.pPath+name+'.pem', 'w') as file:
             # Serialize the certificate
             buffer = aCert.dump();
@@ -112,7 +114,7 @@ class BasicKeyStore(KeyStore):
             if os.path.isfile(self.pPath+dir) :
                 # If the extension of the file is ".pem"
                 if os.path.splitext(dir)[1] == '.pem' :
-                    # We need to open the file with binary and reading options
+                    # We need to open the file with reading option
                     with open(self.pPath+dir, 'r') as file:
                         # Last we deserialize the file
                         buffer = file.read()
@@ -128,3 +130,44 @@ class BasicKeyStore(KeyStore):
         :return: The keys of the dictionnary
         """
         return self.dCert.keys()
+
+    def addCombine(self, aKey, aCert, aName = None):
+        """
+        Add the cert and the key
+
+        :param aCert: The key of the certificate to add
+        :param aCert: The certificate to add
+        :param aName: Special name at None by default
+        """
+        # We take the ID to name the certificate
+        if aName == None :
+            name = str(aCert.ID())
+        else :
+            name = aName
+        # We add the certificate to the dictionnary and persistently
+        addCert(self, aCert, name)
+        # Now add the key to the disk for persistence
+        # To the path and file extension ".key" we open the file with writing option
+        with open(self.pPath+name+'.key', 'w') as file:
+            # Serialize the certificate
+            buffer = aKey.dump_private();
+            file.write(buffer)
+            # Close the file
+            file.close()
+
+    def getKey(self, aId):
+        """
+        Retrieve the Key saved on the file named "aId.key" in the path
+
+        :return: The wanted key or None if it does not exists
+        """
+        pKey = None
+        if os.path.isfile(self.pPath+aId+'.key') :
+            # We need to open the file with reading option
+            with open(self.pPath+aId+'.key', 'r') as file:
+                # Last we deserialize the file
+                buffer = file.read()
+                pKey = Key.load_private(buffer)
+                # We close the file
+                file.close()
+        return pKey

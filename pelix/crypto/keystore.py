@@ -74,3 +74,21 @@ class KeyStore:
         :return: The IDs
         """
         pass
+
+    def addCombine(self, aKey, aCert, aName = None):
+        """
+        Add the cert and the key
+
+        :param aCert: The key of the certificate to add
+        :param aCert: The certificate to add
+        :param aName: Special name at None by default
+        """
+        pass
+
+    def getKey(self, aId):
+        """
+        Retrieve the Key saved on the file named "aId.key" in the path
+
+        :return: The wanted key or None if it does not exists
+        """
+        pass
