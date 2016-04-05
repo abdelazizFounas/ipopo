@@ -9,13 +9,11 @@ Provides a basic keystore
 # Standard library
 from pelix.crypto.keystore import KeyStore
 import logging
-import pickle
 import os
 
 _logger = logging.getLogger(__name__)
 
 # ------------------------------------------------------------------------------
-
 
 class BasicKeyStore(KeyStore):
     """
@@ -68,17 +66,17 @@ class BasicKeyStore(KeyStore):
         """
         # We take the ID to give to the certificate
         if aName == None :
-            name = aCert.getId()
+            name = str(aCert.ID())
         else :
             name = aName
         # We add the certificate to the dictionnary
         self.dCert[name] = aCert
         # Now add this certificate to the disk for persistence
         # To the path and file extension ".pem" we open the file with binary and writing options
-        with open(self.pPath+name+'.pem', 'wb') as file:
-            # Serialize the certificate with pickler
-            pickler = pickle.Pickler(file)
-            pickler.dump(aCert)
+        with open(self.pPath+name+'.pem', 'w') as file:
+            # Serialize the certificate
+            buffer = aCert.dump();
+            file.write(buffer)
             # Close the file
             file.close()
 
@@ -115,10 +113,11 @@ class BasicKeyStore(KeyStore):
                 # If the extension of the file is ".pem"
                 if os.path.splitext(dir)[1] == '.pem' :
                     # We need to open the file with binary and reading options
-                    with open(self.pPath+dir, 'rb') as file:
-                        # Last we deserialize the file with unpickler
-                        unpickler = pickle.Unpickler(file)
-                        self.dCert[os.path.splitext(dir)[0]] = unpickler.load()
+                    with open(self.pPath+dir, 'r') as file:
+                        # Last we deserialize the file
+                        buffer = file.read()
+                        cert = Certificate.load(buffer)
+                        self.dCert.addCert(cert, os.path.splitext(dir)[0])
                         # We close the file
                         file.close()
 
