@@ -43,13 +43,13 @@ class Entity:
         return self.C
 
     def get_stateOrProvinceName(self):
-         """
+        """
         Returns the state or province name
         """
         return self.ST
 
     def get_localityName(self):
-         """
+        """
         Returns the locality name
         """
         return self.L
